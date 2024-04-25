@@ -4,5 +4,3 @@ class CreateNewList(forms.Form):
     name = forms.CharField(label="Name", max_length=200)
     check = forms.BooleanField(required=False)
 
-class CreateNewItem(forms.Form):
-    item = forms.CharField(label="Item", max_length=200)
