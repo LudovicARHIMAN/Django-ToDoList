@@ -6,6 +6,15 @@ Home Page
 
 {%block content%}
 <h1>Home Page</h1>
-{{name}}
 
+{% if user.is_authenticated %}
+    <p>You're login as "{{user.username}}"</p>
+    <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Logout</button>
+    </form>
+{% else %}
+    <p>You're not login</p>
+    <p>Login<a href="/login"> Here</a></p>
+{% endif %}
 {%endblock%}

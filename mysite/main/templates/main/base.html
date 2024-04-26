@@ -39,25 +39,25 @@
  
 	<title>{% block title %}Ludovic's Site{% endblock %}</title>
 </head>
- 
+
 <body>
 	<div class="sidenav">
 		<a href="/">Home</a>
 		<a href="/create">Create</a>
-		<a href="/2">View</a>
+		<a href="/view">View</a>
 	</div>
- 
+	
 	<div id="content" name="content" class="main">
 		<div class="row justify-content-center">
 			<div class="col-8">
 				<h1 class="mt-2">To Do List Maker</h1>
 				<hr class="mt-0 mb-4">
-				{% if user.is_authenticated %}
-					{% block content %}
-					{% endblock %}
-				{% else %}
+				{% block content %}
+				{% endblock %}
+				{% if user.not_authenticated %}
 					<p>Login<a href="/login"> Here</a></p>
 				{% endif %}
+					
 			</div>
 		</div>
 	</div>
