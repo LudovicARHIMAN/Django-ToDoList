@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.views.generic import View
-from django.views.generic.edit import FormView
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDoList, Item
 from .forms import CreateNewList
@@ -8,7 +6,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 
 
-# Function Based View
+# Function Based Views
 '''
 def index(request, id):
     ls = ToDoList.objects.get(id=id)
@@ -61,7 +59,7 @@ def View_List(request):
     return render(request, 'main/view.html', {})
 '''
 
-# Class Based View
+# Class Based Views
 class Index(View):
     template_name_list = 'main/list.html'
     template_name_view = 'main/view.html'
@@ -130,7 +128,7 @@ class Create(View):
         context = {
             "form" : form
         }
-        return render(request, self.template_name, {"form": form})
+        return render(request, self.template_name, context)
 
 
 class View_List(View):
@@ -139,7 +137,6 @@ class View_List(View):
     
     def get(self, request):
         context = {
-            
         }
 
         return render(request, self.template_name, context)
