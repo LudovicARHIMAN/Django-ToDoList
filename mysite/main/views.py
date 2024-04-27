@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDoList, Item
 from .forms import CreateNewList
@@ -140,4 +140,13 @@ class View_List(View):
         }
 
         return render(request, self.template_name, context)
+    
+
+
+class DeleteItem(View):
+    template_name_list = 'main/list.html'
+    template_name_view = 'main/view.html'
+
+    def get(self, request):
+        return render(request, self.template_name_view, {} )
     
