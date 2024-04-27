@@ -142,11 +142,71 @@ class View_List(View):
         return render(request, self.template_name, context)
     
 
-
 class DeleteItem(View):
     template_name_list = 'main/list.html'
     template_name_view = 'main/view.html'
 
-    def get(self, request):
-        return render(request, self.template_name_view, {} )
+    def get(self, request, id):
+        ls = ToDoList.objects.get(id=id)
+        context = {
+            "ls" : ls
+        }
+
+        if ls in request.user.todolist.all():
+            return render(request, self.template_name_list, context)
+        
+        return render(request, self.template_name_view, context)
+
+
+    def post(self, request, id):
+        ls = ToDoList.objects.get(id=id)
+        context = {
+            "ls" : ls
+        }
+
+        if ls in request.user.todolist.all():
+            if request.POST.get("save"):
+                for item in ls.item_set.all():
+                    if request.POST.get("c" + str(item.id)) == "delte":
+                        item.delete()
+
+            return render(request, self.template_name_list, context)
+
+        return render(request, self.template_name_view, context)
+
+
+class DeleteList(View):
+    template_name_list = 'main/list.html'
+    template_name_view = 'main/view.html'
+
+    def get(self, request, id):
+        ls = ToDoList.objects.get(id=id)
+        context = {
+            "ls" : ls
+        }
+
+        if ls in request.user.todolist.all():
+            return render(request, self.template_name_list, context)
+        
+        return render(request, self.template_name_view, context)
+
+
+    def post(self, request, id):
+        ls = ToDoList.objects.get(id=id)
+        context = {
+            "ls" : ls
+        }
+
+        if ls in request.user.todolist.all():
+            if request.POST.get("save"):
+                for item in ls.item_set.all():
+                    if request.POST.get("c" + str(item.id)) == "delte":
+                        ls.delete()
+
+            return render(request, self.template_name_list, context)
+
+        return render(request, self.template_name_view, context)
+
+
+    
     
