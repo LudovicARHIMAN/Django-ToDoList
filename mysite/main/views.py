@@ -1,96 +1,146 @@
 from django.shortcuts import render
 from django.views.generic import View
+from django.views.generic.edit import FormView
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDoList, Item
 from .forms import CreateNewList
 from django.views import View
+from django.contrib.auth.decorators import login_required
+
 
 # Function Based View
-
-def index(response, id):
+'''
+def index(request, id):
     ls = ToDoList.objects.get(id=id)
 
-    if ls in response.user.todolist.all():
+    if ls in request.user.todolist.all():
     
-        if response.method == "POST":
-            if response.POST.get("save"):
+        if request.method == "POST":
+            if request.POST.get("save"):
                 for item in ls.item_set.all():
-                    if response.POST.get("c" + str(item.id)) == "clicked":
+                    if request.POST.get("c" + str(item.id)) == "clicked":
                         item.complete = True
                     else:
                         item.complete = False
                     
                     item.save()
-            elif response.POST.get("newItem"):
-                txt = response.POST.get("new")
+            elif request.POST.get("newItem"):
+                txt = request.POST.get("new")
                 if len(txt) > 2:
                     ls.item_set.create(text=txt, complete=False)
                 else:
                     print("error")
         
-        return render(response, 'main/list.html', {"ls":ls})
-    return render(response, 'main/view.html', {"ls":ls})
-
-
-'''
-def home(response):
-    return render(response, 'main/home.html')
+        return render(request, 'main/list.html', {"ls":ls})
+    return render(request, 'main/view.html', {"ls":ls})
 
 
 
+def home(request):
+    return render(request, 'main/home.html')
 
-# Function Based View
-def create(response):
-    if response.method == "POST":
-        form = CreateNewList(response.POST)
+
+def create(request):
+    if request.method == "POST":
+        form = CreateNewList(request.POST)
 
         if form.is_valid():
             n = form.cleaned_data["name"]
             t = ToDoList(name=n)
             t.save()
-            response.user.todolist.add(t)
+            request.user.todolist.add(t)
             
         return HttpResponseRedirect("/%i"  %t.id)
     else:
         form = CreateNewList()
-    return render(response, 'main/create.html', {"form":form})
+    return render(request, 'main/create.html', {"form":form})
 
 
 
-def view(response):
-    return render(response, 'main/view.html', {})
+def View_List(request):
+    return render(request, 'main/view.html', {})
 '''
 
-
 # Class Based View
-class Home(View):
-    template = 'main/create.html'
+class Index(View):
+    template_name_list = 'main/list.html'
+    template_name_view = 'main/view.html'
 
-    def post(self, response):
-        return render(response, self.template)
+    def get(self, request, id):
+        ls = ToDoList.objects.get(id=id)
+        context = {
+            "ls" : ls
+        }
+
+        if ls in request.user.todolist.all():
+            return render(request, self.template_name_list, context)
+        
+        return render(request, self.template_name_view, context)
+
+
+    def post(self, request, id):
+        ls = ToDoList.objects.get(id=id)
+        context = {
+            "ls" : ls
+        }
+
+        if ls in request.user.todolist.all():
+            if request.POST.get("save"):
+                for item in ls.item_set.all():
+                    if request.POST.get("c" + str(item.id)) == "clicked":
+                        item.complete = True
+                    else:
+                        item.complete = False
+                    item.save()
+            elif request.POST.get("newItem"):
+                txt = request.POST.get("new")
+                if len(txt) > 2:
+                    ls.item_set.create(text=txt, complete=False)
+                else:
+                    print("error")
+
+            return render(request, self.template_name_list, context)
+
+        return render(request, self.template_name_view, context)
+
+
+
+class Home(View):
+    template_name = 'main/home.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
 
 class Create(View):
-    template = 'main/create.html'
+    template_name = 'main/create.html'
 
-    def post(self, response):
-        form = CreateNewList(response.POST)
+    def post(self, request):
+        form = CreateNewList(request.POST)
 
         if form.is_valid():
             n = form.cleaned_data["name"]
             t = ToDoList(name=n)
             t.save()
-            response.user.todolist.add(t)
-            
-        return HttpResponseRedirect("/%i"  %t.id)
-    
-    def get(self, response):
-        form = CreateNewList()
-        return render(response, self.template, {"form":form})
+            request.user.todolist.add(t)
+            return HttpResponseRedirect("/%i" % t.id)
 
+    def get(self, request):
+        form = CreateNewList()
+        context = {
+            "form" : form
+        }
+        return render(request, self.template_name, {"form": form})
 
 
 class View_List(View):
-    template = 'main/view.html'
+    template_name = 'main/view.html'
     
-    def get(self, response):
-        return render(response, self.template, {})
+    
+    def get(self, request):
+        context = {
+            
+        }
+
+        return render(request, self.template_name, context)
+    
