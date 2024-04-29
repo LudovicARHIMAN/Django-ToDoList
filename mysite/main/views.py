@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import ToDoList, Item
 from .forms import CreateNewList
-from django.views import View
+from django.views.generic import View, TemplateView, ListView
 from django.contrib.auth.decorators import login_required
 
 
@@ -37,6 +37,7 @@ def index(request, id):
 def home(request):
     return render(request, 'main/home.html')
 
+    
 
 def create(request):
     if request.method == "POST":
@@ -75,7 +76,6 @@ class Index(View):
         
         return render(request, self.template_name_view, context)
 
-
     def post(self, request, id):
         ls = ToDoList.objects.get(id=id)
         context = {
@@ -103,11 +103,8 @@ class Index(View):
 
 
 
-class Home(View):
+class Home(TemplateView):
     template_name = 'main/home.html'
-
-    def get(self, request):
-        return render(request, self.template_name)
 
 
 class Create(View):
@@ -131,9 +128,9 @@ class Create(View):
         return render(request, self.template_name, context)
 
 
+
 class View_List(View):
     template_name = 'main/view.html'
-    
     
     def get(self, request):
         context = {
@@ -141,6 +138,7 @@ class View_List(View):
 
         return render(request, self.template_name, context)
     
+
 
 class DeleteItem(View):
     template_name_list = 'main/list.html'
@@ -156,7 +154,6 @@ class DeleteItem(View):
             return render(request, self.template_name_list, context)
         
         return render(request, self.template_name_view, context)
-
 
     def post(self, request, id):
         ls = ToDoList.objects.get(id=id)
@@ -190,7 +187,6 @@ class DeleteList(View):
         
         return render(request, self.template_name_view, context)
 
-
     def post(self, request, id):
         ls = ToDoList.objects.get(id=id)
         context = {
@@ -206,7 +202,3 @@ class DeleteList(View):
             return render(request, self.template_name_list, context)
 
         return render(request, self.template_name_view, context)
-
-
-    
-    
