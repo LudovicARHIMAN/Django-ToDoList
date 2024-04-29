@@ -4,6 +4,8 @@ from .models import ToDoList, Item
 from .forms import CreateNewList
 from django.views.generic import View, TemplateView, ListView
 from django.contrib.auth.decorators import login_required
+from api.serializers import ToDoListSerializers
+from rest_framework.generics import ListAPIView
 
 
 # Function Based Views
@@ -37,7 +39,6 @@ def index(request, id):
 def home(request):
     return render(request, 'main/home.html')
 
-    
 
 def create(request):
     if request.method == "POST":
@@ -128,77 +129,10 @@ class Create(View):
         return render(request, self.template_name, context)
 
 
-
-class View_List(View):
+class View_List(TemplateView):
     template_name = 'main/view.html'
-    
-    def get(self, request):
-        context = {
-        }
-
-        return render(request, self.template_name, context)
-    
 
 
-class DeleteItem(View):
-    template_name_list = 'main/list.html'
-    template_name_view = 'main/view.html'
-
-    def get(self, request, id):
-        ls = ToDoList.objects.get(id=id)
-        context = {
-            "ls" : ls
-        }
-
-        if ls in request.user.todolist.all():
-            return render(request, self.template_name_list, context)
-        
-        return render(request, self.template_name_view, context)
-
-    def post(self, request, id):
-        ls = ToDoList.objects.get(id=id)
-        context = {
-            "ls" : ls
-        }
-
-        if ls in request.user.todolist.all():
-            if request.POST.get("save"):
-                for item in ls.item_set.all():
-                    if request.POST.get("c" + str(item.id)) == "delte":
-                        item.delete()
-
-            return render(request, self.template_name_list, context)
-
-        return render(request, self.template_name_view, context)
-
-
-class DeleteList(View):
-    template_name_list = 'main/list.html'
-    template_name_view = 'main/view.html'
-
-    def get(self, request, id):
-        ls = ToDoList.objects.get(id=id)
-        context = {
-            "ls" : ls
-        }
-
-        if ls in request.user.todolist.all():
-            return render(request, self.template_name_list, context)
-        
-        return render(request, self.template_name_view, context)
-
-    def post(self, request, id):
-        ls = ToDoList.objects.get(id=id)
-        context = {
-            "ls" : ls
-        }
-
-        if ls in request.user.todolist.all():
-            if request.POST.get("save"):
-                for item in ls.item_set.all():
-                    if request.POST.get("c" + str(item.id)) == "delte":
-                        ls.delete()
-
-            return render(request, self.template_name_list, context)
-
-        return render(request, self.template_name_view, context)
+class ToDoListView(ListAPIView):
+    queryset = ToDoList.objects.all()
+    serializer_class = ToDoListSerializers
