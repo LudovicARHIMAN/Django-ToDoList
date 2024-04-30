@@ -1,0 +1,26 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+View
+{% endblock title %}
+
+{% block content %}
+    {% if user.todolist.all %}
+        {% for td in user.todolist.all %}
+            <h3><a href="/{{ td.id }}">{{ td.name }}</a></h3>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                   
+                </div>
+                <input type="text" value="{{item.text}}" class="form-control" disabled>
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <button name="{{td.id}}" value="delete" type="submit" class="btn btn-success"><i href="" class="fa-solid fa-trash"></i></button>
+                </form>
+            </div>
+            
+        {% endfor %}
+    {% else %}
+        <p>No to-do lists found. <a href="/create/">Create a new list</a></p>
+    {% endif %}
+{% endblock content %}

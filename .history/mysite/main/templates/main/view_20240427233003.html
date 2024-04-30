@@ -1,0 +1,20 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+View
+{% endblock title %}
+
+{% block content %}
+    {% if user.todolist.all %}
+        {% for td in user.todolist.all %}
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <h3><a href="/{{ td.id }}">{{ td.name }}</a></h3>
+                </div>
+            </div>
+            
+        {% endfor %}
+    {% else %}
+        <p>No to-do lists found. <a href="/create/">Create a new list</a></p>
+    {% endif %}
+{% endblock content %}

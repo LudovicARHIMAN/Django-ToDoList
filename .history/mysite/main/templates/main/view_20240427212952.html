@@ -1,0 +1,24 @@
+{% extends 'main/base.html' %}
+<style>
+    .a
+     {
+        color: red;
+    }
+</style>
+{% block title %}
+View
+{% endblock title %}
+
+{% block content %}
+    {% if user.todolist.all %}
+        {% for td in user.todolist.all %}
+            <h3><a href="/{{ td.id }}">{{ td.name }}</a></h3>
+            <form action="#" method="post">
+                <button name="delete" type="submit" class="btn btn-success"><a href="" class="fa-solid fa-trash"></a></button>
+            </form>
+            
+        {% endfor %}
+    {% else %}
+        <p>No to-do lists found. <a href="/create/">Create a new list</a></p>
+    {% endif %}
+{% endblock content %}

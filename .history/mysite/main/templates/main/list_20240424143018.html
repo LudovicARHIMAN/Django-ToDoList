@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{%block title%}View List{% endblock %} 
+
+{% block content %}
+<form method="post" action="#">
+    <h1>{{ls.name}}</h1>
+    <ul>
+    {% for item in ls.item_set.all%}
+        {% if item.complete == True %}
+            <li><input type="checkbox" value="clicked" name="c{item.text}}"></li>
+        {% else %}
+            <li> <input type="checkbox" value="clicked" name="c{item.text}}"></li>
+        {% endif %}
+    {% endfor %}
+        <button type="submit" name="save" value="save">Save List State</button>
+
+        <button type="submit" name="newItem" value="newItem">Add new Item</button>
+        
+    </ul>
+</form>
+{% endblock content %}
