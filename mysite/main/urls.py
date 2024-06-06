@@ -6,6 +6,7 @@ urlpatterns = [
     path("",views.Home.as_view(), name="Home"),
     path("create/",views.Create.as_view(), name="Create"),
     path("view/",views.View_List.as_view(), name="View_List"),
+    #API URL
     path("todo/", views.ToDoListView.as_view(), name="ToDoListView"),
     path("item/", views.ItemView.as_view(), name="ItemView"),
 ]

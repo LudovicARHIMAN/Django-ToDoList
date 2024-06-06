@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 
 
+
 # Function Based Views
 '''
 def index(request, id):
@@ -37,13 +38,13 @@ def index(request, id):
         return render(request, 'main/list.html', {"ls":ls})
     return render(request, 'main/view.html', {"ls":ls})
 
-    
+ 
 
 def home(request):
     return render(request, 'main/home.html')
 
 
-    
+
 def create(request):
     if request.method == "POST":
         form = CreateNewList(request.POST)
@@ -158,6 +159,7 @@ class ToDoListView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors)
+
 
 
 class ItemView(APIView):
