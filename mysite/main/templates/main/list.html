@@ -17,10 +17,6 @@
 				</div>
 			</div>
 			<input type="text" value="{{item.text}}" class="form-control" disabled>
-			<form action="#" method="post">
-                {% csrf_token %}
-                <button name="c{{item.id}}" value="delete" type="submit" class="btn btn-success"><i href="" class="fa-solid fa-trash"></i></button>
-            </form>
 		</div>
 		{% endfor %}
 
